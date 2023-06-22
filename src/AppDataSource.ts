@@ -7,4 +7,5 @@ export const AppDataSource = new DataSource({
   username: 'C##NODE',
   password: 'node',
   database: 'apipessoas',
+  migrations: [`${__dirname}/**/migrations/*.{ts,js}`],
 });
