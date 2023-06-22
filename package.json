@@ -8,7 +8,7 @@
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --ext .ts --fix",
     "typeorm": "typeorm-ts-node-commonjs",
-    "migrate:generate": "typeorm-ts-node-commonjs migration:generate src/migrations -d src/AppDataSource.ts",
+    "migrate:generate": "typeorm-ts-node-commonjs migration:generate src/migrations/default -d src/AppDataSource.ts",
     "migrate:run": "typeorm-ts-node-commonjs migration:run -d src/AppDataSource.ts"
   },
   "keywords": [],
