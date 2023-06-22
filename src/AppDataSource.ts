@@ -6,7 +6,7 @@ export const AppDataSource = new DataSource({
   port: 1521,
   username: 'C##NODE',
   password: 'node',
-  database: 'apipessoas',
+  database: 'pessoasapi',
   entities: [`${__dirname}/**/entidades/*.{ts,js}`],
   migrations: [`${__dirname}/**/migrations/*.{ts,js}`],
 });

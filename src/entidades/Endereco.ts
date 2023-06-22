@@ -11,20 +11,20 @@ import { Bairro } from './Bairro';
 
 @Entity('TB_ENDERECO')
 export class Endereco {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: 'CODIGO_ENDERECO' })
   codigoEndereco: number;
-  @Column()
+  @Column({ name: 'NOME_RUA', type: 'varchar2', length: 256 })
   nomeRua: string;
-  @Column()
+  @Column({ name: 'NUMERO', type: 'varchar2', length: 10 })
   numero: string;
-  @Column()
-  complenmento: string;
-  @Column()
+  @Column({ name: 'COMPLEMENTO', type: 'varchar2', length: 20, nullable: true })
+  complemento: string;
+  @Column({ name: 'CEP', type: 'varchar2', length: 10 })
   cep: string;
   @ManyToOne(() => Pessoa, pessoa => pessoa.enderecos)
-  @JoinColumn({ name: 'codigoPessoa' })
+  @JoinColumn({ name: 'CODIGO_PESSOA' })
   pessoa: Pessoa;
   @ManyToOne(() => Bairro, bairro => bairro.enderecos)
-  @JoinColumn({ name: 'codigoBairro' })
+  @JoinColumn({ name: 'CODIGO_BAIRRO' })
   bairro: Bairro;
 }

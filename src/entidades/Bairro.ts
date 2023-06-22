@@ -11,15 +11,15 @@ import { Municipio } from './Municipio';
 
 @Entity('TB_BAIRRO')
 export class Bairro {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: 'CODIGO_BAIRRO' })
   codigoBairro: number;
-  @Column()
+  @Column({ name: 'NOME', type: 'varchar2', length: 256 })
   nome: string;
-  @Column()
+  @Column({ name: 'STATUS', width: 3, nullable: true })
   status: number;
   @OneToMany(() => Endereco, endereco => endereco.bairro)
   enderecos: Endereco[];
   @ManyToOne(() => Municipio, municipio => municipio.bairros)
-  @JoinColumn({ name: 'codigoMunicipio' })
+  @JoinColumn({ name: 'CODIGO_MUNICIPIO' })
   municipio: Municipio;
 }

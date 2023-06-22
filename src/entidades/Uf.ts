@@ -3,13 +3,13 @@ import { Municipio } from './Municipio';
 
 @Entity('TB_UF')
 export class Uf {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: 'CODIGO_UF' })
   codigoUf: number;
-  @Column()
+  @Column({ name: 'SIGLA', type: 'varchar2', length: 3 })
   sigla: string;
-  @Column()
+  @Column({ name: 'NOME', type: 'varchar2', length: 60 })
   nome: string;
-  @Column()
+  @Column({ name: 'STATUS', width: 3 })
   status: number;
   @OneToMany(() => Municipio, municipio => municipio.uf)
   municipios: Municipio[];
