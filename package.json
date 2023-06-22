@@ -6,7 +6,10 @@
     "test": "echo \"Error: no test specified\" &amp;&amp; exit 1",
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/index.ts",
     "lint": "eslint . --ext .ts",
-    "lint-fix": "eslint . --ext .ts --fix"
+    "lint-fix": "eslint . --ext .ts --fix",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "migrate:generate": "typeorm-ts-node-commonjs migration:generate src/migrations -d src/AppDataSource.ts",
+    "migrate:run": "typeorm-ts-node-commonjs migration:run -d src/AppDataSource.ts"
   },
   "keywords": [],
   "author": "",
