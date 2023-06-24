@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
-import rotas from './rotas/index';
 import { AppDataSource } from './AppDataSource';
 import AppError from './erros/AppError';
+import { rotas } from './rotas';
 
 const app = express();
 
@@ -25,10 +25,9 @@ AppDataSource.initialize().then(() => {
           messagem: error.messagem,
         });
       }
-
       return response.status(500).json({
         status: 'error',
-        messagem: 'Erro do Servidor Interno',
+        messagem: 'Erro do servidor Interno',
       });
     },
   );

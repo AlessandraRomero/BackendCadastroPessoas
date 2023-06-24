@@ -1,9 +1,8 @@
 import { Router } from 'express';
+import { pessoasRouter } from './pessoa';
 
 const rotas = Router();
 
-rotas.get('/', (request, response) => {
-  return response.json({ menssagem: 'Hello World!' });
-});
+rotas.use(pessoasRouter);
 
-export default rotas;
+export { rotas };
