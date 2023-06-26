@@ -17,7 +17,7 @@ async function inserirPessoa(pessoaDados: IRequest) {
   const pessoaExiste = await pessoaRepository.findOneBy(pessoa);
 
   if (pessoaExiste) {
-    throw new AppError('Essa pessoa já existe na base de dados');
+    return null;
   }
   return pessoaRepository.save(pessoa);
 }

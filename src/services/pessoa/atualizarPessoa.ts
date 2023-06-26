@@ -2,7 +2,7 @@ import { AppDataSource } from '../../AppDataSource';
 import { Pessoa } from '../../entidades/Pessoa';
 
 interface IRequest {
-  codigoPessoa?: number;
+  codigoPessoa: number;
   nome: string;
   sobrenome: string;
   idade: number;
@@ -12,9 +12,11 @@ interface IRequest {
 }
 async function atualizarPessoa(pessoa: IRequest) {
   const pessoaRepository = AppDataSource.getRepository(Pessoa);
+
   const pessoaExiste = await pessoaRepository.findOneBy({
     codigoPessoa: pessoa.codigoPessoa,
   });
+
   if (pessoaExiste === null) {
     return null;
   }
