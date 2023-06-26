@@ -15,7 +15,7 @@ export class Municipio {
   codigoMunicipio: number;
   @Column({ name: 'NOME', type: 'varchar2', length: 256, nullable: true })
   nome: string;
-  @Column({ name: 'STATUS', type: 'number', width: 3, nullable: true })
+  @Column({ name: 'STATUS', type: 'number', precision: 3, nullable: true })
   status: number;
   @OneToMany(() => Bairro, bairro => bairro.municipio)
   bairros: Bairro[];

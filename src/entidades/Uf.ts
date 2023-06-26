@@ -4,12 +4,12 @@ import { Municipio } from './Municipio';
 @Entity('TB_UF')
 export class Uf {
   @PrimaryGeneratedColumn({ name: 'CODIGO_UF' })
-  codigoUf: number;
+  codigoUF: number;
   @Column({ name: 'SIGLA', type: 'varchar2', length: 3 })
   sigla: string;
   @Column({ name: 'NOME', type: 'varchar2', length: 60 })
   nome: string;
-  @Column({ name: 'STATUS', type: 'number', width: 3 })
+  @Column({ name: 'STATUS', type: 'number', precision: 3 })
   status: number;
   @OneToMany(() => Municipio, municipio => municipio.uf)
   municipios: Municipio[];

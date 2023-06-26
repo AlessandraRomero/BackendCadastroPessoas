@@ -15,7 +15,7 @@ export class Bairro {
   codigoBairro: number;
   @Column({ name: 'NOME', type: 'varchar2', length: 256 })
   nome: string;
-  @Column({ name: 'STATUS', type: 'number', width: 3, nullable: true })
+  @Column({ name: 'STATUS', type: 'number', precision: 3, nullable: true })
   status: number;
   @OneToMany(() => Endereco, endereco => endereco.bairro)
   enderecos: Endereco[];
