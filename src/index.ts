@@ -1,5 +1,5 @@
-import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
+import express, { NextFunction, Request, Response } from 'express';
 import { AppDataSource } from './AppDataSource';
 import AppError from './erros/AppError';
 import { rotas } from './rotas';
@@ -22,16 +22,16 @@ AppDataSource.initialize().then(() => {
       if (error instanceof AppError) {
         return response.status(error.status).json({
           status: 'error',
-          messagem: error.messagem,
+          mensagem: error.messagem,
         });
       }
       return response.status(500).json({
         status: 'error',
-        messagem: 'Erro do servidor Interno',
+        mensagem: 'Erro do servidor Interno',
       });
     },
   );
-  app.listen(1522, () => {
-    console.log('Servidor rodando na porta 1522');
+  app.listen(3333, () => {
+    console.log('Servidor rodando na porta 3333');
   });
 });
