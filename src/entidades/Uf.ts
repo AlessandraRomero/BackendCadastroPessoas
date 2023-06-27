@@ -9,7 +9,7 @@ export class Uf {
   sigla: string;
   @Column({ name: 'NOME', type: 'varchar2', length: 60 })
   nome: string;
-  @Column({ name: 'STATUS', type: 'number', precision: 3 })
+  @Column({ name: 'STATUS', type: 'number', precision: 3, scale: 0 })
   status: number;
   @OneToMany(() => Municipio, municipio => municipio.uf)
   municipios: Municipio[];
