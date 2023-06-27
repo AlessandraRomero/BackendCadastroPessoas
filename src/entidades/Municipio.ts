@@ -15,11 +15,17 @@ export class Municipio {
   codigoMunicipio: number;
   @Column({ name: 'NOME', type: 'varchar2', length: 256, nullable: true })
   nome: string;
-  @Column({ name: 'STATUS', type: 'number', precision: 3, nullable: true })
+  @Column({
+    name: 'STATUS',
+    type: 'number',
+    precision: 3,
+    scale: 0,
+    nullable: true,
+  })
   status: number;
   @OneToMany(() => Bairro, bairro => bairro.municipio)
   bairros: Bairro[];
-  @ManyToOne(() => Uf, uf => uf.municipios)
+  @ManyToOne(() => Uf, uf => uf.municipios, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'CODIGO_UF' })
   uf: Uf;
 }
