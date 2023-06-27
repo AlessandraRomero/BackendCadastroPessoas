@@ -3,11 +3,10 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Pessoa } from './Pessoa';
 import { Bairro } from './Bairro';
+import { Pessoa } from './Pessoa';
 
 @Entity('TB_ENDERECO')
 export class Endereco {
@@ -21,10 +20,10 @@ export class Endereco {
   complemento: string;
   @Column({ name: 'CEP', type: 'varchar2', length: 10 })
   cep: string;
-  @ManyToOne(() => Pessoa, pessoa => pessoa.enderecos)
+  @ManyToOne(() => Pessoa, pessoa => pessoa.enderecos, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'CODIGO_PESSOA' })
   pessoa: Pessoa;
-  @ManyToOne(() => Bairro, bairro => bairro.enderecos)
+  @ManyToOne(() => Bairro, bairro => bairro.enderecos, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'CODIGO_BAIRRO' })
   bairro: Bairro;
 }
