@@ -3,16 +3,16 @@ import {
   atualizaUf,
   criarUf,
   excluiUf,
-  listaUfPorId,
+  listaUfPor,
   listarUfs,
 } from '../controllers/ufController';
 
 const ufRouter = Router();
 
 ufRouter.get('/uf', listarUfs);
-ufRouter.get('/uf/:id', listaUfPorId);
+ufRouter.get('/uf', listaUfPor);
 ufRouter.post('/uf', criarUf);
-ufRouter.put('/bairro/:id', atualizaUf);
-ufRouter.delete('/bairro/:id', excluiUf);
+ufRouter.put('/uf', atualizaUf);
+ufRouter.delete('/uf/:id', excluiUf);
 
 export { ufRouter };

@@ -1,5 +1,5 @@
-import AppError from '../../erros/AppError';
 import { AppDataSource } from '../../AppDataSource';
+import { Endereco } from '../../entidades/Endereco';
 import { Pessoa } from '../../entidades/Pessoa';
 
 interface IRequest {
@@ -9,6 +9,7 @@ interface IRequest {
   login: string;
   senha: string;
   status: number;
+  enderecos: Endereco[];
 }
 
 async function inserirPessoa(pessoaDados: IRequest) {

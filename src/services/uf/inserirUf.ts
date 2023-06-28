@@ -2,7 +2,7 @@ import { AppDataSource } from '../../AppDataSource';
 import { Uf } from '../../entidades/Uf';
 
 interface IRequest {
-  codigoUF: number;
+  codigoUF?: number;
   sigla: string;
   nome: string;
   status: number;

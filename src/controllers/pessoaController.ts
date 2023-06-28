@@ -1,9 +1,10 @@
+import { Request, Response } from 'express';
+import { Endereco } from '../entidades/Endereco';
 import { atualizarPessoa } from '../services/pessoa/atualizarPessoa';
 import { buscarPessoaPorId } from '../services/pessoa/buscarPessoaPorId';
 import { buscarPessoas } from '../services/pessoa/buscarPessoas';
 import { excluirPessoa } from '../services/pessoa/excluirPessoa';
 import { inserirPessoa } from '../services/pessoa/inserirPessoa';
-import { Request, Response } from 'express';
 
 interface IRequest {
   codigoPessoa: number;
@@ -13,6 +14,7 @@ interface IRequest {
   login: string;
   senha: string;
   status: number;
+  enderecos: Endereco[];
 }
 
 async function listarPessoas(req: Request, res: Response) {
@@ -27,7 +29,7 @@ async function listarPessoas(req: Request, res: Response) {
 }
 
 async function listaPessoaPorId(req: Request, res: Response) {
-  const codigoPessoa = Number(req.params.id);
+  const codigoPessoa = Number(req.params.codigoPessoa);
 
   const pessoa = await buscarPessoaPorId(codigoPessoa);
 
@@ -41,6 +43,7 @@ async function listaPessoaPorId(req: Request, res: Response) {
 
 async function criarPessoa(req: Request, res: Response) {
   const pessoaDados: IRequest = req.body;
+  pessoaDados.codigoPessoa = Number(req.body);
   const resultado = await inserirPessoa(pessoaDados);
 
   if (resultado) {
@@ -52,7 +55,6 @@ async function criarPessoa(req: Request, res: Response) {
 
 async function atualizaPessoa(req: Request, res: Response) {
   const pessoaDados: IRequest = req.body;
-  pessoaDados.codigoPessoa = Number(req.params.id);
   const resultado = await atualizarPessoa(pessoaDados);
 
   if (resultado) return res.send('pessoa atualizada');
@@ -74,9 +76,9 @@ async function excluiPessoa(req: Request, res: Response) {
 }
 
 export {
-  listarPessoas,
-  listaPessoaPorId,
-  criarPessoa,
   atualizaPessoa,
+  criarPessoa,
   excluiPessoa,
+  listaPessoaPorId,
+  listarPessoas,
 };

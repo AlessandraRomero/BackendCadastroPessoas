@@ -2,14 +2,13 @@ import { AppDataSource } from '../../AppDataSource';
 import { Uf } from '../../entidades/Uf';
 
 interface IRequest {
-  codigoUF: number;
+  codigoUF?: number;
   sigla: string;
   nome: string;
   status: number;
 }
 async function atualizarUf(uf: IRequest) {
   const ufRepository = AppDataSource.getRepository(Uf);
-
   const ufExiste = await ufRepository.findOneBy({
     codigoUF: uf.codigoUF,
   });

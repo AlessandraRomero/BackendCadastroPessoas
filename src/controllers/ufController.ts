@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { excluirBairro } from '../services/bairro/excluirBairro';
 import { atualizarUf } from '../services/uf/atualizarUf';
-import { buscarUfPorId } from '../services/uf/buscarUfPorId';
+import { buscarUfPor } from '../services/uf/buscarUfPorId';
 import { buscarUfs } from '../services/uf/buscarUfs';
 import { inserirUf } from '../services/uf/inserirUf';
 
@@ -18,20 +18,25 @@ async function listarUfs(req: Request, res: Response) {
   if (ufs) return res.status(200).send(ufs);
 
   return res.status(404).send({
-    mensagem: 'Não foi possível encontrar todos os ufs',
+    mensagem: 'Não foi possível consultar UF no banco de dados.',
     status: 404,
   });
 }
+interface IFilter {
+  codigoUF?: number;
+  sigla?: string;
+  nome?: string;
+  status?: number;
+}
 
-async function listaUfPorId(req: Request, res: Response) {
-  const codigoUF = Number(req.params.id);
-
-  const uf = await buscarUfPorId(codigoUF);
+async function listaUfPor(req: Request, res: Response) {
+  const filtros: IFilter = req.params;
+  const uf = await buscarUfPor(filtros);
 
   if (uf) return res.send(uf);
 
   return res.status(404).send({
-    Error: 'Não foi possíve encontrar uf por id',
+    mensagem: 'Não foi possível consultar UF no banco de dados.',
     status: 404,
   });
 }
@@ -44,17 +49,24 @@ async function criarUf(req: Request, res: Response) {
     const ufs = await buscarUfs();
     return res.status(200).send(ufs);
   }
-  return res.status(404).send({});
+  return res.status(404).send({
+    mensagem: 'Não foi possível incluir UF no banco de dados.',
+    status: 404,
+  });
 }
 
 async function atualizaUf(req: Request, res: Response) {
   const ufDados: IRequest = req.body;
-  ufDados.codigoUF = Number(req.params.id);
   const resultado = await atualizarUf(ufDados);
 
-  if (resultado) return res.send('uf atualizada');
-
-  return res.status(404).send('Erro ao atualizar');
+  if (resultado) {
+    const ufs = await buscarUfs();
+    return res.status(200).send(ufs);
+  }
+  return res.status(404).send({
+    mensagem: 'Não foi possível alterar UF no banco de dados.',
+    status: 404,
+  });
 }
 
 async function excluiUf(req: Request, res: Response) {
@@ -70,4 +82,4 @@ async function excluiUf(req: Request, res: Response) {
   });
 }
 
-export { atualizaUf, criarUf, excluiUf, listaUfPorId, listarUfs };
+export { atualizaUf, criarUf, excluiUf, listaUfPor, listarUfs };
