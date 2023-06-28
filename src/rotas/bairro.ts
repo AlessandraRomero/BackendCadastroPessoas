@@ -3,16 +3,14 @@ import {
   atualizaBairro,
   criarBairro,
   excluiBairro,
-  listaBairroPorId,
   listarBairros,
 } from '../controllers/bairroController';
 
 const bairroRouter = Router();
 
-bairroRouter.get('/bairros', listarBairros);
-bairroRouter.get('/bairro/:id', listaBairroPorId);
-bairroRouter.post('/bairro', criarBairro);
-bairroRouter.put('/bairro/:id', atualizaBairro);
-bairroRouter.delete('/bairro/:id', excluiBairro);
+bairroRouter.get('/', listarBairros);
+bairroRouter.post('/', criarBairro);
+bairroRouter.put('/:id', atualizaBairro);
+bairroRouter.delete('/:id', excluiBairro);
 
 export { bairroRouter };

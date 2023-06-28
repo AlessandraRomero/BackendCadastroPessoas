@@ -6,7 +6,7 @@ interface IRequest {
   codigoBairro: number;
   nome: string;
   status: number;
-  municipio: Municipio;
+  codigoMunicipio: Municipio;
 }
 async function atualizarBairro(bairro: IRequest) {
   const bairroRepository = AppDataSource.getRepository(Bairro);
@@ -20,7 +20,7 @@ async function atualizarBairro(bairro: IRequest) {
   }
   bairroExiste.nome = bairro.nome;
   bairroExiste.status = bairro.status;
-  bairroExiste.municipio = bairro.municipio;
+  bairroExiste.codigoMunicipio = bairro.codigoMunicipio;
   return bairroRepository.save(bairroExiste);
 }
 export { atualizarBairro };

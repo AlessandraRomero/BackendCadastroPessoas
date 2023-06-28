@@ -6,7 +6,7 @@ interface IRequest {
   codigoMunicipio: number;
   nome: string;
   status: number;
-  uf: Uf;
+  codigoUF: Uf;
 }
 async function atualizarMunicipio(municipio: IRequest) {
   const municipioRepository = AppDataSource.getRepository(Municipio);
@@ -20,7 +20,7 @@ async function atualizarMunicipio(municipio: IRequest) {
   }
   municipioExiste.nome = municipio.nome;
   municipioExiste.status = municipio.status;
-  municipioExiste.uf = municipio.uf;
+  municipioExiste.codigoUF = municipio.codigoUF;
   return municipioRepository.save(municipioExiste);
 }
 export { atualizarMunicipio };

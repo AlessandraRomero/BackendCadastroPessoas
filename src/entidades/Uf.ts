@@ -11,6 +11,6 @@ export class Uf {
   nome: string;
   @Column({ name: 'STATUS', type: 'number', precision: 3, scale: 0 })
   status: number;
-  @OneToMany(() => Municipio, municipio => municipio.uf)
+  @OneToMany(() => Municipio, municipio => municipio.codigoUF)
   municipios: Municipio[];
 }

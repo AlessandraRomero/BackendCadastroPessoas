@@ -1,16 +1,15 @@
-import AppError from '../../erros/AppError';
 import { AppDataSource } from '../../AppDataSource';
-import { Pessoa } from '../../entidades/Pessoa';
 import { Bairro } from '../../entidades/Bairro';
 import { Endereco } from '../../entidades/Endereco';
+import { Pessoa } from '../../entidades/Pessoa';
 
 interface IRequest {
   nomeRua: string;
   numero: string;
   complemento: string;
   cep: string;
-  pessoa: Pessoa;
-  bairro: Bairro;
+  codigoPessoa: Pessoa;
+  codigoBairro: Bairro;
 }
 
 async function inserirEndereco(enderecoDados: IRequest) {

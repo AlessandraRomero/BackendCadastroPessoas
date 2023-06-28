@@ -23,9 +23,9 @@ export class Municipio {
     nullable: true,
   })
   status: number;
-  @OneToMany(() => Bairro, bairro => bairro.municipio)
+  @OneToMany(() => Bairro, bairro => bairro.codigoMunicipio)
   bairros: Bairro[];
   @ManyToOne(() => Uf, uf => uf.municipios, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'CODIGO_UF' })
-  uf: Uf;
+  codigoUF: Uf;
 }

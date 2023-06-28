@@ -9,8 +9,8 @@ interface IRequest {
   numero: string;
   complemento: string;
   cep: string;
-  pessoa: Pessoa;
-  bairro: Bairro;
+  codigoPessoa: Pessoa;
+  codigoBairro: Bairro;
 }
 async function atualizarEndereco(endereco: IRequest) {
   const enderecoRepository = AppDataSource.getRepository(Endereco);
@@ -26,8 +26,8 @@ async function atualizarEndereco(endereco: IRequest) {
   enderecoExiste.numero = endereco.numero;
   enderecoExiste.complemento = endereco.complemento;
   enderecoExiste.cep = endereco.cep;
-  enderecoExiste.pessoa = endereco.pessoa;
-  enderecoExiste.bairro = endereco.bairro;
+  enderecoExiste.codigoPessoa = endereco.codigoPessoa;
+  enderecoExiste.codigoBairro = endereco.codigoBairro;
   return enderecoRepository.save(enderecoExiste);
 }
 export { atualizarEndereco };

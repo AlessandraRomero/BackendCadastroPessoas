@@ -1,6 +1,5 @@
 import { AppDataSource } from '../../AppDataSource';
 import { Uf } from '../../entidades/Uf';
-import AppError from '../../erros/AppError';
 
 interface IRequest {
   codigoUF?: number;
@@ -10,9 +9,9 @@ interface IRequest {
 }
 async function buscarUfPor(filtros: IRequest) {
   const ufRepository = AppDataSource.getRepository(Uf);
-  const uf = await ufRepository.findOneBy({ ...filtros });
+  const uf = await ufRepository.findBy({ ...filtros });
   if (!uf) {
-    throw new AppError('UF não encontrada');
+    return null;
   }
   return uf;
 }

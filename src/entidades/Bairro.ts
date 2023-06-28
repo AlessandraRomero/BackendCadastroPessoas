@@ -23,11 +23,11 @@ export class Bairro {
     nullable: true,
   })
   status: number;
-  @OneToMany(() => Endereco, endereco => endereco.bairro)
+  @OneToMany(() => Endereco, endereco => endereco.codigoBairro)
   enderecos: Endereco[];
   @ManyToOne(() => Municipio, municipio => municipio.bairros, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'CODIGO_MUNICIPIO' })
-  municipio: Municipio;
+  codigoMunicipio: Municipio;
 }

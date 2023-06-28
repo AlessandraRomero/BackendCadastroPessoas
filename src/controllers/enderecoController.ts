@@ -13,8 +13,8 @@ interface IRequest {
   numero: string;
   complemento: string;
   cep: string;
-  pessoa: Pessoa;
-  bairro: Bairro;
+  codigoPessoa: Pessoa;
+  codigoBairro: Bairro;
 }
 
 async function listarEnderecos(req: Request, res: Response) {

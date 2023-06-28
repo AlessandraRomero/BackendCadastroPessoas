@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { excluirBairro } from '../services/bairro/excluirBairro';
 import { atualizarUf } from '../services/uf/atualizarUf';
-import { buscarUfPor } from '../services/uf/buscarUfPorId';
+import { buscarUfPor } from '../services/uf/buscarUfPor';
 import { buscarUfs } from '../services/uf/buscarUfs';
 import { inserirUf } from '../services/uf/inserirUf';
 
@@ -12,33 +12,24 @@ interface IRequest {
   status: number;
 }
 
-async function listarUfs(req: Request, res: Response) {
-  const ufs = await buscarUfs();
+async function listarUfs(req: Request, res: Response, next: NextFunction) {
+  const filtros: IFilter = req.query;
+  const ufs = await buscarUfPor(filtros);
 
   if (ufs) return res.status(200).send(ufs);
 
+  //next(new AppError('Não foi possível consultar UF no banco de dados.', 404));
   return res.status(404).send({
     mensagem: 'Não foi possível consultar UF no banco de dados.',
     status: 404,
   });
 }
+
 interface IFilter {
   codigoUF?: number;
   sigla?: string;
   nome?: string;
   status?: number;
-}
-
-async function listaUfPor(req: Request, res: Response) {
-  const filtros: IFilter = req.params;
-  const uf = await buscarUfPor(filtros);
-
-  if (uf) return res.send(uf);
-
-  return res.status(404).send({
-    mensagem: 'Não foi possível consultar UF no banco de dados.',
-    status: 404,
-  });
 }
 
 async function criarUf(req: Request, res: Response) {
@@ -82,4 +73,4 @@ async function excluiUf(req: Request, res: Response) {
   });
 }
 
-export { atualizaUf, criarUf, excluiUf, listaUfPor, listarUfs };
+export { atualizaUf, criarUf, excluiUf, listarUfs };

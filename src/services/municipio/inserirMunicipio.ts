@@ -5,7 +5,7 @@ import { Uf } from '../../entidades/Uf';
 interface IRequest {
   nome: string;
   status: number;
-  uf: Uf;
+  codigoUF: Uf;
 }
 
 async function inserirMunicipio(municipioDados: IRequest) {

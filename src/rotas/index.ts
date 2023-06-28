@@ -7,10 +7,10 @@ import { ufRouter } from './uf';
 
 const rotas = Router();
 
-rotas.use(pessoasRouter);
-rotas.use(enderecoRouter);
-rotas.use(bairroRouter);
-rotas.use(municipioRouter);
-rotas.use(ufRouter);
+rotas.use('/pessoa', pessoasRouter);
+rotas.use('/endereco', enderecoRouter);
+rotas.use('/bairro', bairroRouter);
+rotas.use('/municipio', municipioRouter);
+rotas.use('/uf', ufRouter);
 
 export { rotas };

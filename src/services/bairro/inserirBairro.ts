@@ -5,7 +5,7 @@ import { Municipio } from '../../entidades/Municipio';
 interface IRequest {
   nome: string;
   status: number;
-  municipio: Municipio;
+  codigoMunicipio: Municipio;
 }
 
 async function inserirBairro(bairroDados: IRequest) {

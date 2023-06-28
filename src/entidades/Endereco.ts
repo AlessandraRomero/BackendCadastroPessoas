@@ -22,8 +22,8 @@ export class Endereco {
   cep: string;
   @ManyToOne(() => Pessoa, pessoa => pessoa.enderecos, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'CODIGO_PESSOA' })
-  pessoa: Pessoa;
+  codigoPessoa: Pessoa;
   @ManyToOne(() => Bairro, bairro => bairro.enderecos, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'CODIGO_BAIRRO' })
-  bairro: Bairro;
+  codigoBairro: Bairro;
 }

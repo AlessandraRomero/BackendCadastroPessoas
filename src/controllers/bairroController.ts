@@ -10,7 +10,7 @@ interface IRequest {
   codigoBairro: number;
   nome: string;
   status: number;
-  municipio: Municipio;
+  codigoMunicipio: Municipio;
 }
 
 async function listarBairros(req: Request, res: Response) {
