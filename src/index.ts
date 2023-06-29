@@ -1,7 +1,7 @@
+import { CelebrateError } from 'celebrate';
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import { AppDataSource } from './AppDataSource';
-import AppError from './erros/AppError';
 import { rotas } from './rotas';
 
 const app = express();
@@ -19,10 +19,11 @@ AppDataSource.initialize().then(() => {
       response: Response,
       next: NextFunction,
     ) => {
-      if (error instanceof AppError) {
-        return response.status(error.status).json({
-          status: 'error',
-          mensagem: error.messagem,
+      if (error instanceof CelebrateError) {
+        const errorBody = error.details.get('body');
+        return response.status(400).json({
+          status: '400',
+          mensagem: errorBody?.message,
         });
       }
       return response.status(500).json({

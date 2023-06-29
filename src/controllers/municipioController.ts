@@ -5,12 +5,13 @@ import { buscarMunicipioPor } from '../services/municipio/buscarMunicipioPor';
 import { buscarMunicipios } from '../services/municipio/buscarMunicipios';
 import { excluirMunicipio } from '../services/municipio/excluirMunicipio';
 import { inserirMunicipio } from '../services/municipio/inserirMunicipio';
+import { buscarUfPor } from '../services/uf/buscarUfPor';
 
 interface IRequest {
   codigoMunicipio: number;
   nome: string;
   status: number;
-  codigoUF: Uf;
+  codigoUF: number;
 }
 
 async function listarMunicipios(req: Request, res: Response) {
@@ -34,7 +35,21 @@ interface IFilter {
 
 async function criarMunicipio(req: Request, res: Response) {
   const municipioDados: IRequest = req.body;
-  const resultado = await inserirMunicipio(municipioDados);
+  const ufExiste = await buscarUfPor({ codigoUF: municipioDados.codigoUF });
+
+  if (!ufExiste)
+    return res.status(404).send({
+      mensagem: 'Não foi possível localizar uf',
+      status: 404,
+    });
+
+  const municipioNovo = {
+    nome: municipioDados.nome,
+    status: municipioDados.status,
+    codigoUF: ufExiste[0],
+  };
+
+  const resultado = await inserirMunicipio(municipioNovo);
 
   if (resultado) {
     const municipios = await buscarMunicipios();
@@ -45,7 +60,6 @@ async function criarMunicipio(req: Request, res: Response) {
 
 async function atualizaMunicipio(req: Request, res: Response) {
   const municipioDados: IRequest = req.body;
-  municipioDados.codigoMunicipio = Number(req.params.id);
   const resultado = await atualizarMunicipio(municipioDados);
 
   if (resultado) return res.send('municipio atualizada');
