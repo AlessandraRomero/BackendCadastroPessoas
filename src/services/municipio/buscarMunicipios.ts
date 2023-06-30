@@ -5,8 +5,8 @@ async function buscarMunicipios() {
   const municipioRepository = AppDataSource.getRepository(Municipio);
 
   const municipios = await municipioRepository
-    .createQueryBuilder('municipio')
-    .innerJoin('municipio.codigoUF', 'uf')
+    .createQueryBuilder("municipio")
+    .innerJoin("municipio.codigoUF", "uf")
     .select([
       'municipio.codigoMunicipio',
       'municipio.nome',
@@ -15,13 +15,13 @@ async function buscarMunicipios() {
     ])
     .getMany();
 
-  const municipiosFiltrados = municipios.map(municipio => {
+  const municipiosFiltrados = municipios.map((municipio) => {
     return {
       codigoMunicipio: municipio.codigoMunicipio,
       nome: municipio.nome,
       status: municipio.status,
       codigoUF: municipio.codigoUF.codigoUF,
-    };
+    }
   });
 
   return municipiosFiltrados;

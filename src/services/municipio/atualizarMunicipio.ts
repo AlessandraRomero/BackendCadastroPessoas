@@ -10,22 +10,23 @@ interface IRequest {
 }
 async function atualizarMunicipio(municipioDados: IRequest) {
   const municipioRepository = AppDataSource.getRepository(Municipio);
-  const municipio: IRequest = municipioDados;
 
   const municipioExiste = await municipioRepository
     .createQueryBuilder('municipio')
-    .innerJoinAndSelect(
-      'municipio.codigoUF',
-      'uf',
-      'uf.codigoUF = : codigoUF',
-      { codigoUF: municipio.codigoUF.codigoUF },
-    )
-    .where({ ...municipio })
-    .getMany();
+    .innerJoinAndSelect('municipio.codigoUF', 'uf')
+    .where({ codigoMunicipio: municipioDados.codigoMunicipio })
+    .getOne();
 
-  if (municipioExiste.length) {
+  if (!municipioExiste) {
     return null;
   }
-  return municipioRepository.save(municipio);
+
+  municipioExiste.nome = municipioDados.nome;
+  municipioExiste.status = municipioDados.status;
+  municipioExiste.codigoUF = municipioDados.codigoUF;
+
+  await municipioRepository.save(municipioExiste);
+
+  return municipioExiste;
 }
 export { atualizarMunicipio };

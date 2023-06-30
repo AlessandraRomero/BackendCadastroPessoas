@@ -10,7 +10,7 @@ interface IRequest {
 async function buscarUfPor(filtros: IRequest) {
   const ufRepository = AppDataSource.getRepository(Uf);
   const uf = await ufRepository.findBy({ ...filtros });
-  if (!uf) {
+  if (!uf.length) {
     return null;
   }
   return uf;

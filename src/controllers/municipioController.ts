@@ -61,9 +61,11 @@ async function criarMunicipio(req: Request, res: Response) {
 async function atualizaMunicipio(req: Request, res: Response) {
   const municipioDados: IRequest = req.body;
   const ufExiste = await buscarUfPor({ codigoUF: municipioDados.codigoUF });
+
   const municipioExiste = await buscarMunicipioPor({
     codigoMunicipio: municipioDados.codigoMunicipio,
   });
+
   if (!ufExiste || !municipioExiste)
     return res.status(404).send({
       mensagem: 'Não foi possível localizar',
@@ -76,7 +78,7 @@ async function atualizaMunicipio(req: Request, res: Response) {
     status: municipioDados.status,
     codigoUF: ufExiste[0],
   };
-
+  
   const resultado = await atualizarMunicipio(municipioNovo);
 
   if (resultado) {

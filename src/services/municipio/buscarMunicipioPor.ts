@@ -11,7 +11,7 @@ interface IRequest {
 async function buscarMunicipioPor(filtros: IRequest) {
   const municipioRepository = AppDataSource.getRepository(Municipio);
   const municipio = await municipioRepository.findBy({ ...filtros });
-  if (!municipio) {
+  if (!municipio.length) {
     return null;
   }
   return municipio;
