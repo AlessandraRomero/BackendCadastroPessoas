@@ -11,9 +11,19 @@ interface IRequest {
 async function inserirBairro(bairroDados: IRequest) {
   const bairroRepository = AppDataSource.getRepository(Bairro);
   const bairro: IRequest = bairroDados;
-  const bairroExiste = await bairroRepository.findOneBy(bairro);
 
-  if (bairroExiste) {
+  const bairroExiste = await bairroRepository
+    .createQueryBuilder('bairro')
+    .innerJoinAndSelect(
+      'bairro.codigoMunicipio',
+      'municipio',
+      'municipio.codigoMunicipio = :codigoMunicipio',
+      { codigoMunicipio: bairro.codigoMunicipio.codigoMunicipio },
+    )
+    .where({ ...bairro })
+    .getMany();
+
+  if (bairroExiste.length) {
     return null;
   }
   return bairroRepository.save(bairro);
