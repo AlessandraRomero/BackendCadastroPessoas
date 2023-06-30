@@ -60,11 +60,30 @@ async function criarMunicipio(req: Request, res: Response) {
 
 async function atualizaMunicipio(req: Request, res: Response) {
   const municipioDados: IRequest = req.body;
-  const resultado = await atualizarMunicipio(municipioDados);
+  const ufExiste = await buscarUfPor({ codigoUF: municipioDados.codigoUF });
+  const municipioExiste = await buscarMunicipioPor({
+    codigoMunicipio: municipioDados.codigoMunicipio,
+  });
+  if (!ufExiste || !municipioExiste)
+    return res.status(404).send({
+      mensagem: 'Não foi possível localizar',
+      status: 404,
+    });
 
-  if (resultado) return res.send('municipio atualizada');
+  const municipioNovo = {
+    codigoMunicipio: municipioDados.codigoMunicipio,
+    nome: municipioDados.nome,
+    status: municipioDados.status,
+    codigoUF: ufExiste[0],
+  };
 
-  return res.status(404).send('Erro ao atualizar');
+  const resultado = await atualizarMunicipio(municipioNovo);
+
+  if (resultado) {
+    const municipios = await buscarMunicipios();
+    return res.status(200).send(municipios);
+  }
+  return res.status(404).send({});
 }
 
 async function excluiMunicipio(req: Request, res: Response) {
