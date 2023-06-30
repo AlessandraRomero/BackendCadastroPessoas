@@ -8,19 +8,24 @@ interface IRequest {
   status: number;
   codigoUF: Uf;
 }
-async function atualizarMunicipio(municipio: IRequest) {
+async function atualizarMunicipio(municipioDados: IRequest) {
   const municipioRepository = AppDataSource.getRepository(Municipio);
+  const municipio: IRequest = municipioDados;
 
-  const municipioExiste = await municipioRepository.findOneBy({
-    codigoMunicipio: municipio.codigoMunicipio,
-  });
+  const municipioExiste = await municipioRepository
+    .createQueryBuilder('municipio')
+    .innerJoinAndSelect(
+      'municipio.codigoUF',
+      'uf',
+      'uf.codigoUF = : codigoUF',
+      { codigoUF: municipio.codigoUF.codigoUF },
+    )
+    .where({ ...municipio })
+    .getMany();
 
-  if (municipioExiste === null) {
+  if (municipioExiste.length) {
     return null;
   }
-  municipioExiste.nome = municipio.nome;
-  municipioExiste.status = municipio.status;
-  municipioExiste.codigoUF = municipio.codigoUF;
-  return municipioRepository.save(municipioExiste);
+  return municipioRepository.save(municipio);
 }
 export { atualizarMunicipio };
