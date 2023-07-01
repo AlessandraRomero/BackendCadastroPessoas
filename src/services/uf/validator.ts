@@ -13,7 +13,7 @@ const validarPost = {
 };
 const validarPut = {
   [Segments.BODY]: {
-    codigoUf: Joi.number().required().messages(mensagemCustomizada('codigoUF')),
+    //codigoUf: Joi.number().required().messages(mensagemCustomizada('codigoUF')),
     sigla: Joi.string().required().messages(mensagemCustomizada('sigla')),
     nome: Joi.string().required().messages(mensagemCustomizada('nome')),
     status: Joi.number()

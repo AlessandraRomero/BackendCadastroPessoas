@@ -1,8 +1,8 @@
-import AppError from '../../erros/AppError';
 import { AppDataSource } from '../../AppDataSource';
 import { Pessoa } from '../../entidades/Pessoa';
+import AppError from '../../erros/AppError';
 
-async function buscarPessoaPorId(codigoPessoa: number) {
+async function buscarPessoaPor(codigoPessoa: number) {
   const pessoaRepository = AppDataSource.getRepository(Pessoa);
   const pessoa = await pessoaRepository.findOneBy({ codigoPessoa });
   if (!pessoa) {
@@ -10,4 +10,4 @@ async function buscarPessoaPorId(codigoPessoa: number) {
   }
   return pessoa;
 }
-export { buscarPessoaPorId };
+export { buscarPessoaPor };

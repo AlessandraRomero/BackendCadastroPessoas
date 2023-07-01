@@ -16,9 +16,9 @@ interface IRequest {
 
 async function listarBairros(req: Request, res: Response) {
   const filtros: IFilter = req.query;
-  const bairos = await buscarBairroPor(filtros);
+  const bairros = await buscarBairroPor(filtros);
 
-  if (bairos) return res.status(200).send(bairos);
+  if (bairros) return res.status(200).send(bairros);
 
   return res.status(404).send({});
 }

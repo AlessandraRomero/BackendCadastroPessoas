@@ -34,13 +34,15 @@ interface IFilter {
 
 async function criarUf(req: Request, res: Response) {
   const ufDados: IRequest = req.body;
+  const ufExiste = await buscarUfPor({ nome: ufDados.nome });
   const resultado = await inserirUf(ufDados);
-  if (resultado?.status != 1 && resultado?.status != 2) {
-    return res.status(200).send({
-      mensagem: '',
+  if (resultado == ufExiste) {
+    return res.status(404).send({
+      mensagem: 'uf existe',
       status: 404,
     });
   }
+
   const ufs = await buscarUfs();
   return res.status(200).send(ufs);
 }
@@ -53,21 +55,18 @@ async function atualizaUf(req: Request, res: Response) {
 
   if (!ufExiste)
     return res.status(404).send({
-      mensagem: 'Não foi possível localizar',
+      mensagem: 'Não foi possível localizar uf',
       status: 404,
     });
-  const novaUF = {
-    codigoUF: ufDados.codigoUF,
-    sigla: ufDados.sigla,
-    nome: ufDados.nome,
-    status: ufDados.status,
-  };
 
-  const resultado = await atualizarUf(novaUF);
+  const resultado = await atualizarUf(ufDados);
+
+  console.log(resultado);
   if (resultado) {
     const ufs = await buscarUfs();
     return res.status(200).send(ufs);
   }
+
   return res.status(404).send({
     mensagem: 'Não foi possível alterar UF no banco de dados.',
     status: 404,

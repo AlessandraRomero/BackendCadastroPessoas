@@ -17,6 +17,8 @@ export class Pessoa {
   senha: string;
   @Column({ name: 'STATUS', type: 'number', precision: 3, scale: 0 })
   status: number;
-  @OneToMany(() => Endereco, endereco => endereco.codigoPessoa)
+  @OneToMany(() => Endereco, endereco => endereco.codigoPessoa, {
+    cascade: ['insert', 'update'],
+  })
   enderecos: Endereco[];
 }

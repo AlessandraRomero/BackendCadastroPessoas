@@ -17,7 +17,7 @@ async function buscarMunicipioPor(filtros: IRequest) {
       'municipio.codigoMunicipio',
       'municipio.nome',
       'municipio.status',
-      'uf',
+      'uf.codigoUF',
     ])
     .where({ ...filtros })
     .getMany();

@@ -12,7 +12,6 @@ interface IRequest {
 }
 async function atualizarPessoa(pessoa: IRequest) {
   const pessoaRepository = AppDataSource.getRepository(Pessoa);
-
   const pessoaExiste = await pessoaRepository.findOneBy({
     codigoPessoa: pessoa.codigoPessoa,
   });

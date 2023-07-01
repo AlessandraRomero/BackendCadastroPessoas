@@ -1,3 +1,4 @@
+import { Router } from 'express';
 import {
   atualizaPessoa,
   criarPessoa,
@@ -5,14 +6,13 @@ import {
   listaPessoaPorId,
   listarPessoas,
 } from '../controllers/pessoaController';
-import { Router } from 'express';
 
 const pessoasRouter = Router();
 
-pessoasRouter.get('/pessoas', listarPessoas);
-pessoasRouter.get('/pessoa/:id', listaPessoaPorId);
-pessoasRouter.post('/pessoa', criarPessoa);
-pessoasRouter.put('/pessoa/:id', atualizaPessoa);
-pessoasRouter.delete('/pessoa/:id', excluiPessoa);
+pessoasRouter.get('/', listarPessoas);
+pessoasRouter.get('/', listaPessoaPorId);
+pessoasRouter.post('/', criarPessoa);
+pessoasRouter.put('/', atualizaPessoa);
+pessoasRouter.delete('/:id', excluiPessoa);
 
 export { pessoasRouter };

@@ -7,19 +7,19 @@ interface IRequest {
   nome: string;
   status: number;
 }
-async function atualizarUf(uf: IRequest) {
+async function atualizarUf(ufDados: IRequest) {
   const ufRepository = AppDataSource.getRepository(Uf);
   const ufExiste = await ufRepository.findOneBy({
-    codigoUF: uf.codigoUF,
+    codigoUF: ufDados.codigoUF,
   });
 
-  if (!ufExiste) {
+  if (ufExiste === null) {
     return null;
   }
 
-  ufExiste.nome = uf.nome;
-  ufExiste.sigla = uf.nome;
-  ufExiste.status = uf.status;
+  ufExiste.sigla = ufDados.sigla;
+  ufExiste.nome = ufDados.nome;
+  ufExiste.status = ufDados.status;
   await ufRepository.save(ufExiste);
   return ufExiste;
 }

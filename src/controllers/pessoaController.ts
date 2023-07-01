@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Endereco } from '../entidades/Endereco';
 import { atualizarPessoa } from '../services/pessoa/atualizarPessoa';
-import { buscarPessoaPorId } from '../services/pessoa/buscarPessoaPorId';
+import { buscarPessoaPor } from '../services/pessoa/buscarPessoaPor';
 import { buscarPessoas } from '../services/pessoa/buscarPessoas';
 import { excluirPessoa } from '../services/pessoa/excluirPessoa';
 import { inserirPessoa } from '../services/pessoa/inserirPessoa';
@@ -31,7 +31,7 @@ async function listarPessoas(req: Request, res: Response) {
 async function listaPessoaPorId(req: Request, res: Response) {
   const codigoPessoa = Number(req.params.codigoPessoa);
 
-  const pessoa = await buscarPessoaPorId(codigoPessoa);
+  const pessoa = await buscarPessoaPor(codigoPessoa);
 
   if (pessoa) return res.send(pessoa);
 
