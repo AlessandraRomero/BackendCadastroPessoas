@@ -13,12 +13,14 @@ async function atualizarUf(uf: IRequest) {
     codigoUF: uf.codigoUF,
   });
 
-  if (ufExiste === null) {
+  if (!ufExiste) {
     return null;
   }
+
   ufExiste.nome = uf.nome;
   ufExiste.sigla = uf.nome;
   ufExiste.status = uf.status;
-  return ufRepository.save(ufExiste);
+  await ufRepository.save(ufExiste);
+  return ufExiste;
 }
 export { atualizarUf };

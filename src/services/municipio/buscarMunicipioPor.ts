@@ -10,10 +10,27 @@ interface IRequest {
 }
 async function buscarMunicipioPor(filtros: IRequest) {
   const municipioRepository = AppDataSource.getRepository(Municipio);
-  const municipio = await municipioRepository.findBy({ ...filtros });
-  if (!municipio.length) {
-    return null;
-  }
-  return municipio;
+  const municipios = await municipioRepository
+    .createQueryBuilder('municipio')
+    .innerJoin('municipio.codigoUF', 'uf')
+    .select([
+      'municipio.codigoMunicipio',
+      'municipio.nome',
+      'municipio.status',
+      'uf',
+    ])
+    .where({ ...filtros })
+    .getMany();
+
+  const municipiosFiltrados = municipios.map(municipio => {
+    return {
+      codigoMunicipio: municipio.codigoMunicipio,
+      nome: municipio.nome,
+      status: municipio.status,
+      codigoUF: municipio.codigoUF.codigoUF,
+    };
+  });
+
+  return municipiosFiltrados;
 }
 export { buscarMunicipioPor };

@@ -20,10 +20,7 @@ async function listarBairros(req: Request, res: Response) {
 
   if (bairos) return res.status(200).send(bairos);
 
-  return res.status(404).send({
-    mensagem: 'Não foi possível consultar município no banco de dados.',
-    status: 404,
-  });
+  return res.status(404).send({});
 }
 interface IFilter {
   codigoBairro?: number;
@@ -65,12 +62,34 @@ async function criarBairro(req: Request, res: Response) {
 
 async function atualizaBairro(req: Request, res: Response) {
   const bairroDados: IRequest = req.body;
-  bairroDados.codigoBairro = Number(req.params.id);
-  const resultado = await atualizarBairro(bairroDados);
+  const municipioExiste = await buscarMunicipioPor({
+    codigoMunicipio: bairroDados.codigoMunicipio,
+  });
 
-  if (resultado) return res.send('bairro atualizada');
+  const bairroExiste = await buscarBairroPor({
+    codigoBairro: bairroDados.codigoBairro,
+  });
 
-  return res.status(404).send('Erro ao atualizar');
+  if (!municipioExiste || !bairroExiste)
+    return res.status(404).send({
+      mensagem: 'Não foi possível localizar',
+      status: 404,
+    });
+
+  const bairroNovo = {
+    codigoBairro: bairroDados.codigoBairro,
+    nome: bairroDados.nome,
+    status: bairroDados.status,
+    codigoMunicipio: municipioExiste[0],
+  };
+
+  const resultado = await atualizarBairro(bairroNovo);
+
+  if (resultado) {
+    const bairros = await buscarBairros();
+    return res.status(200).send(bairros);
+  }
+  return res.status(404).send([]);
 }
 
 async function excluiBairro(req: Request, res: Response) {
@@ -81,7 +100,7 @@ async function excluiBairro(req: Request, res: Response) {
   if (bairro) return res.send(bairro);
 
   return res.status(404).send({
-    Mensagem: 'Não foi possível localizar bairro',
+    Mensagem: 'Não foi possível localizar municipio',
     status: 404,
   });
 }

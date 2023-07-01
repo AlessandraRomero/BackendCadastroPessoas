@@ -21,7 +21,7 @@ async function listarMunicipios(req: Request, res: Response) {
   if (municipios) return res.status(200).send(municipios);
 
   return res.status(404).send({
-    mensagem: 'Não foi possível encontrar todos os bairros',
+    mensagem: 'Não foi possível encontrar bairro',
     status: 404,
   });
 }
@@ -55,7 +55,7 @@ async function criarMunicipio(req: Request, res: Response) {
     const municipios = await buscarMunicipios();
     return res.status(200).send(municipios);
   }
-  return res.status(404).send({});
+  return res.status(404).send([]);
 }
 
 async function atualizaMunicipio(req: Request, res: Response) {
@@ -78,7 +78,7 @@ async function atualizaMunicipio(req: Request, res: Response) {
     status: municipioDados.status,
     codigoUF: ufExiste[0],
   };
-  
+
   const resultado = await atualizarMunicipio(municipioNovo);
 
   if (resultado) {

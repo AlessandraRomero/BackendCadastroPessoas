@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { excluirBairro } from '../services/bairro/excluirBairro';
 import { atualizarUf } from '../services/uf/atualizarUf';
 import { buscarUfPor } from '../services/uf/buscarUfPor';
 import { buscarUfs } from '../services/uf/buscarUfs';
+import { excluirUf } from '../services/uf/excluirUf';
 import { inserirUf } from '../services/uf/inserirUf';
 
 interface IRequest {
@@ -35,21 +35,35 @@ interface IFilter {
 async function criarUf(req: Request, res: Response) {
   const ufDados: IRequest = req.body;
   const resultado = await inserirUf(ufDados);
-
-  if (resultado) {
-    const ufs = await buscarUfs();
-    return res.status(200).send(ufs);
+  if (resultado?.status != 1 && resultado?.status != 2) {
+    return res.status(200).send({
+      mensagem: '',
+      status: 404,
+    });
   }
-  return res.status(404).send({
-    mensagem: 'Não foi possível incluir UF no banco de dados.',
-    status: 404,
-  });
+  const ufs = await buscarUfs();
+  return res.status(200).send(ufs);
 }
 
 async function atualizaUf(req: Request, res: Response) {
   const ufDados: IRequest = req.body;
-  const resultado = await atualizarUf(ufDados);
+  const ufExiste = await buscarUfPor({
+    codigoUF: ufDados.codigoUF,
+  });
 
+  if (!ufExiste)
+    return res.status(404).send({
+      mensagem: 'Não foi possível localizar',
+      status: 404,
+    });
+  const novaUF = {
+    codigoUF: ufDados.codigoUF,
+    sigla: ufDados.sigla,
+    nome: ufDados.nome,
+    status: ufDados.status,
+  };
+
+  const resultado = await atualizarUf(novaUF);
   if (resultado) {
     const ufs = await buscarUfs();
     return res.status(200).send(ufs);
@@ -63,7 +77,7 @@ async function atualizaUf(req: Request, res: Response) {
 async function excluiUf(req: Request, res: Response) {
   const codigoUF = Number(req.params.id);
 
-  const uf = await excluirBairro(codigoUF);
+  const uf = await excluirUf(codigoUF);
 
   if (uf) return res.send(uf);
 

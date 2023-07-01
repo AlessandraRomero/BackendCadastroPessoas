@@ -8,19 +8,25 @@ interface IRequest {
   status: number;
   codigoMunicipio: Municipio;
 }
-async function atualizarBairro(bairro: IRequest) {
+async function atualizarBairro(bairroDados: IRequest) {
   const bairroRepository = AppDataSource.getRepository(Bairro);
 
-  const bairroExiste = await bairroRepository.findOneBy({
-    codigoBairro: bairro.codigoBairro,
-  });
+  const bairroExiste = await bairroRepository
+    .createQueryBuilder('bairro')
+    .innerJoinAndSelect('bairro.codigoMunicipio', 'municipio')
+    .where({ codigoBairro: bairroDados.codigoMunicipio })
+    .getOne();
 
-  if (bairroExiste === null) {
+  if (!bairroExiste) {
     return null;
   }
-  bairroExiste.nome = bairro.nome;
-  bairroExiste.status = bairro.status;
-  bairroExiste.codigoMunicipio = bairro.codigoMunicipio;
-  return bairroRepository.save(bairroExiste);
+
+  bairroExiste.nome = bairroDados.nome;
+  bairroExiste.status = bairroDados.status;
+  bairroExiste.codigoMunicipio = bairroDados.codigoMunicipio;
+
+  await bairroRepository.save(bairroExiste);
+
+  return bairroExiste;
 }
 export { atualizarBairro };

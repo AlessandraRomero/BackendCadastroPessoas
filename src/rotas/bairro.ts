@@ -10,7 +10,7 @@ const bairroRouter = Router();
 
 bairroRouter.get('/', listarBairros);
 bairroRouter.post('/', criarBairro);
-bairroRouter.put('/:id', atualizaBairro);
+bairroRouter.put('/', atualizaBairro);
 bairroRouter.delete('/:id', excluiBairro);
 
 export { bairroRouter };
