@@ -43,14 +43,13 @@ async function listaPessoaPorId(req: Request, res: Response) {
 
 async function criarPessoa(req: Request, res: Response) {
   const pessoaDados: IRequest = req.body;
-  pessoaDados.codigoPessoa = Number(req.body);
   const resultado = await inserirPessoa(pessoaDados);
 
   if (resultado) {
-    const pessoas = await buscarPessoas();
-    return res.status(200).send(pessoas);
+    const criEndereco = {};
+    //const endereco = await inserirEndereco()
   }
-  return res.status(404).send({});
+  //return res.status(404).send({});
 }
 
 async function atualizaPessoa(req: Request, res: Response) {

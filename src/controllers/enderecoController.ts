@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { Bairro } from '../entidades/Bairro';
-import { Pessoa } from '../entidades/Pessoa';
+import { buscarBairroPor } from '../services/bairro/buscarBairroPor';
 import { atualizarEndereco } from '../services/endereco/atualizarEndereco';
 import { buscarEnderecoPorId } from '../services/endereco/buscarEnderecoPorId';
 import { buscarEnderecos } from '../services/endereco/buscarEnderecos';
 import { inserirEndereco } from '../services/endereco/inserirEndereco';
+import { buscarPessoaPor } from '../services/pessoa/buscarPessoaPor';
 import { excluirPessoa } from '../services/pessoa/excluirPessoa';
 
 interface IRequest {
@@ -13,8 +13,8 @@ interface IRequest {
   numero: string;
   complemento: string;
   cep: string;
-  codigoPessoa: Pessoa;
-  codigoBairro: Bairro;
+  codigoPessoa: number;
+  codigoBairro: number;
 }
 
 async function listarEnderecos(req: Request, res: Response) {
@@ -43,7 +43,29 @@ async function listaEnderecoPorId(req: Request, res: Response) {
 
 async function criarEndereco(req: Request, res: Response) {
   const enderecoDados: IRequest = req.body;
-  const resultado = await inserirEndereco(enderecoDados);
+  const pessoaExiste = await buscarPessoaPor({
+    codigoPessoa: enderecoDados.codigoEndereco,
+  });
+  const bairroExiste = await buscarBairroPor({
+    codigoBairro: enderecoDados.codigoBairro,
+  });
+
+  if (!pessoaExiste && !bairroExiste)
+    return res.status(404).send({
+      mensagem: 'Não foi possível localizar uf',
+      status: 404,
+    });
+
+  const enderecoNovo = {
+    nomeRua: enderecoDados.nomeRua,
+    numero: enderecoDados.numero,
+    complemento: enderecoDados.complemento,
+    cep: enderecoDados.cep,
+    codigoPessoa: pessoaExiste[0],
+    codigoBairro: bairroExiste[0],
+  };
+
+  const resultado = await inserirEndereco(enderecoNovo);
 
   if (resultado) {
     const enderecos = await buscarEnderecos();

@@ -1,12 +1,21 @@
 import { AppDataSource } from '../../AppDataSource';
 import { Pessoa } from '../../entidades/Pessoa';
-import AppError from '../../erros/AppError';
 
-async function buscarPessoaPor(codigoPessoa: number) {
+interface IRequest {
+  codigoPessoa?: number;
+  nome?: string;
+  sobrenome?: string;
+  idade?: number;
+  login?: string;
+  senha?: string;
+  status?: number;
+}
+
+async function buscarPessoaPor(filtros: IRequest) {
   const pessoaRepository = AppDataSource.getRepository(Pessoa);
-  const pessoa = await pessoaRepository.findOneBy({ codigoPessoa });
-  if (!pessoa) {
-    throw new AppError('Pessoa não encontrada');
+  const pessoa = await pessoaRepository.findBy({ ...filtros });
+  if (!pessoa.length) {
+    return null;
   }
   return pessoa;
 }

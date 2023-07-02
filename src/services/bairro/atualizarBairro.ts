@@ -1,20 +1,25 @@
 import { AppDataSource } from '../../AppDataSource';
 import { Bairro } from '../../entidades/Bairro';
-import { Municipio } from '../../entidades/Municipio';
+import { Uf } from '../../entidades/Uf';
 
-interface IRequest {
+interface IDataBairro {
   codigoBairro: number;
   nome: string;
   status: number;
-  codigoMunicipio: Municipio;
+  codigoMunicipio: {
+    codigoMunicipio: number;
+    nome?: string;
+    status?: number;
+    codigo?: Uf;
+  };
 }
-async function atualizarBairro(bairroDados: IRequest) {
+async function atualizarBairro(bairroDados: IDataBairro) {
   const bairroRepository = AppDataSource.getRepository(Bairro);
 
   const bairroExiste = await bairroRepository
     .createQueryBuilder('bairro')
     .innerJoinAndSelect('bairro.codigoMunicipio', 'municipio')
-    .where({ codigoBairro: bairroDados.codigoMunicipio })
+    .where({ codigoBairro: bairroDados.codigoBairro })
     .getOne();
 
   if (!bairroExiste) {
@@ -23,7 +28,9 @@ async function atualizarBairro(bairroDados: IRequest) {
 
   bairroExiste.nome = bairroDados.nome;
   bairroExiste.status = bairroDados.status;
-  bairroExiste.codigoMunicipio = bairroDados.codigoMunicipio;
+  bairroExiste.codigoMunicipio
+    ? bairroDados.codigoMunicipio
+    : bairroDados.codigoMunicipio;
 
   await bairroRepository.save(bairroExiste);
 

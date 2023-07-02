@@ -16,11 +16,10 @@ async function atualizarUf(ufDados: IRequest) {
   if (ufExiste === null) {
     return null;
   }
-
+  ufExiste.codigoUF = ufDados.codigoUF;
   ufExiste.sigla = ufDados.sigla;
   ufExiste.nome = ufDados.nome;
   ufExiste.status = ufDados.status;
-  await ufRepository.save(ufExiste);
-  return ufExiste;
+  return ufRepository.save(ufExiste);
 }
 export { atualizarUf };

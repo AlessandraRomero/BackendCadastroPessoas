@@ -52,16 +52,24 @@ async function atualizaUf(req: Request, res: Response) {
   const ufExiste = await buscarUfPor({
     codigoUF: ufDados.codigoUF,
   });
-
+  console.log(ufExiste);
   if (!ufExiste)
     return res.status(404).send({
       mensagem: 'Não foi possível localizar uf',
       status: 404,
     });
 
-  const resultado = await atualizarUf(ufDados);
+  const ufNovo = {
+    codigoUF: ufDados.codigoUF,
+    sigla: ufDados.sigla,
+    nome: ufDados.nome,
+    status: ufDados.status,
+  };
+  console.log('valores recebidos', ufDados);
 
-  console.log(resultado);
+  const resultado = await atualizarUf(ufNovo);
+
+  console.log('valores inseridos', resultado);
   if (resultado) {
     const ufs = await buscarUfs();
     return res.status(200).send(ufs);

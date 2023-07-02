@@ -1,6 +1,4 @@
 import { AppDataSource } from '../../AppDataSource';
-import { Bairro } from '../../entidades/Bairro';
-import { Endereco } from '../../entidades/Endereco';
 import { Pessoa } from '../../entidades/Pessoa';
 
 interface IRequest {
@@ -10,9 +8,6 @@ interface IRequest {
   login: string;
   senha: string;
   status: number;
-  enderecos: Endereco[{
-    codigoBairro: Bairro;
-  }];
 }
 
 async function inserirPessoa(pessoaDados: IRequest) {

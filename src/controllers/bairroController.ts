@@ -75,7 +75,7 @@ async function atualizaBairro(req: Request, res: Response) {
       mensagem: 'Não foi possível localizar',
       status: 404,
     });
-
+  console.log('DADOS BAIRRO: ', bairroDados);
   const bairroNovo = {
     codigoBairro: bairroDados.codigoBairro,
     nome: bairroDados.nome,
@@ -84,7 +84,7 @@ async function atualizaBairro(req: Request, res: Response) {
   };
 
   const resultado = await atualizarBairro(bairroNovo);
-
+  console.log('resultado', resultado);
   if (resultado) {
     const bairros = await buscarBairros();
     return res.status(200).send(bairros);

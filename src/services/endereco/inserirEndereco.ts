@@ -3,7 +3,7 @@ import { Bairro } from '../../entidades/Bairro';
 import { Endereco } from '../../entidades/Endereco';
 import { Pessoa } from '../../entidades/Pessoa';
 
-interface IRequest {
+interface IDataEndereco {
   nomeRua: string;
   numero: string;
   complemento: string;
@@ -12,12 +12,32 @@ interface IRequest {
   codigoBairro: Bairro;
 }
 
-async function inserirEndereco(enderecoDados: IRequest) {
+async function inserirEndereco(enderecoDados: IDataEndereco) {
   const enderecoRepository = AppDataSource.getRepository(Endereco);
-  const endereco: IRequest = enderecoDados;
-  const enderecoExiste = await enderecoRepository.findOneBy(endereco);
+  const endereco: IDataEndereco = enderecoDados;
 
-  if (enderecoExiste) {
+  const enderecoExiste = await enderecoRepository
+    .createQueryBuilder('endereco')
+    .innerJoinAndSelect(
+      'endereco.codigoPessoa',
+      'pessoa',
+      'pessoa.codigoPessoa = :codigoPessoa',
+      {
+        codigoPessoa: endereco.codigoPessoa.codigoPessoa,
+      },
+    )
+    .innerJoinAndSelect(
+      'endereco.codigoBairro',
+      'bairro',
+      'bairro.codigoBairro =:codigoBairro',
+      {
+        codigoBairro: endereco.codigoBairro.codigoBairro,
+      },
+    )
+    .where({ ...endereco })
+    .getMany();
+
+  if (enderecoExiste.length) {
     return null;
   }
   return enderecoRepository.save(endereco);

@@ -3,23 +3,25 @@ import { mensagemCustomizada } from '../../erros/ValidatorCustomMessage';
 
 const validarPost = {
   [Segments.BODY]: {
-    sigla: Joi.string().required().messages(mensagemCustomizada('sigla')),
     nome: Joi.string().required().messages(mensagemCustomizada('nome')),
     status: Joi.number()
       .precision(3)
       .required()
       .messages(mensagemCustomizada('status')),
+    codigoUF: Joi.number().required().messages(mensagemCustomizada('codigoUF')),
   },
 };
 const validarPut = {
   [Segments.BODY]: {
-    codigoUF: Joi.number().required().messages(mensagemCustomizada('codigoUF')),
-    sigla: Joi.string().required().messages(mensagemCustomizada('sigla')),
+    codigoMunicipio: Joi.number()
+      .required()
+      .messages(mensagemCustomizada('codigoMunicipio')),
     nome: Joi.string().required().messages(mensagemCustomizada('nome')),
     status: Joi.number()
       .precision(3)
       .required()
       .messages(mensagemCustomizada('status')),
+    codigoUF: Joi.number().required().messages(mensagemCustomizada('codigoUF')),
   },
 };
 const validarDelete = {
