@@ -22,7 +22,7 @@ async function listarMunicipios(req: Request, res: Response) {
   if (municipios) return res.status(200).send(municipios);
 
   return res.status(404).send({
-    mensagem: 'Não foi possível encontrar bairro',
+    mensagem: 'Não foi possível consultar município no banco de dados.',
     status: 404,
   });
 }
@@ -70,7 +70,7 @@ async function criarMunicipio(req: Request, res: Response) {
     return res.status(200).send(municipios);
   }
   return res.status(400).send({
-    mensagem: 'Não foi possível incluir municipio no banco de dados.',
+    mensagem: 'Não foi possível cadastrar município no banco de dados.',
     status: 404,
   });
 }
@@ -102,7 +102,10 @@ async function atualizaMunicipio(req: Request, res: Response) {
     const municipios = await buscarMunicipios();
     return res.status(200).send(municipios);
   }
-  return res.status(404).send({});
+  return res.status(404).send({
+    mensagem: 'Não foi possível alterar municipio no banco de dados.',
+    status: 404,
+  });
 }
 
 async function excluiMunicipio(req: Request, res: Response) {

@@ -23,7 +23,7 @@ async function buscarMunicipioPor(filtros: IRequest) {
     .getMany();
 
   if (!municipios.length) {
-    return null;
+    return [];
   }
 
   const municipiosFiltrados = municipios.map(municipio => {

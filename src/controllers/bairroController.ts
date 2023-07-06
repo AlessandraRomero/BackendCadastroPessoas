@@ -90,6 +90,7 @@ async function atualizaBairro(req: Request, res: Response) {
       mensagem: 'Não foi possível localizar',
       status: 404,
     });
+
   console.log('DADOS BAIRRO: ', bairroDados);
   const bairroNovo = {
     codigoBairro: bairroDados.codigoBairro,
@@ -115,7 +116,7 @@ async function excluiBairro(req: Request, res: Response) {
   if (bairro) return res.send(bairro);
 
   return res.status(404).send({
-    Mensagem: 'Não foi possível localizar municipio',
+    Mensagem: 'Não foi possível alterar bairro no banco de dados.',
     status: 404,
   });
 }
