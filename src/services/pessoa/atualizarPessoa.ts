@@ -49,7 +49,6 @@ async function atualizarPessoa(pessoa: IDadosPessoa) {
     );
 
     if (enderecoCorrespondente) {
-      // Atualiza o endereço existente
       enderecoExistente.nomeRua = enderecoCorrespondente.nomeRua;
       enderecoExistente.numero = enderecoCorrespondente.numero;
       enderecoExistente.complemento = enderecoCorrespondente.complemento;
