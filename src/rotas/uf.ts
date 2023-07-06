@@ -6,11 +6,11 @@ import {
   excluiUf,
   listarUfs,
 } from '../controllers/ufController';
-import { validarPost, validarPut } from '../services/uf/validator';
+import { validarGet, validarPost, validarPut } from '../services/uf/validator';
 
 const ufRouter = Router();
 
-ufRouter.get('/', listarUfs);
+ufRouter.get('/', celebrate(validarGet), listarUfs);
 ufRouter.post('/', celebrate(validarPost), criarUf);
 ufRouter.put('/', celebrate(validarPut), atualizaUf);
 ufRouter.delete('/:id', excluiUf);

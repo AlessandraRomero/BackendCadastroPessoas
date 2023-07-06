@@ -6,11 +6,15 @@ import {
   excluiMunicipio,
   listarMunicipios,
 } from '../controllers/municipioController';
-import { validarPost, validarPut } from '../services/municipio/validator';
+import {
+  validarGet,
+  validarPost,
+  validarPut,
+} from '../services/municipio/validator';
 
 const municipioRouter = Router();
 
-municipioRouter.get('/', listarMunicipios);
+municipioRouter.get('/', celebrate(validarGet), listarMunicipios);
 municipioRouter.post('/', celebrate(validarPost), criarMunicipio);
 municipioRouter.put('/', celebrate(validarPut), atualizaMunicipio);
 municipioRouter.delete('/:id', excluiMunicipio);
