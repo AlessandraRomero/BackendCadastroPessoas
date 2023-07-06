@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Municipio } from '../entidades/Municipio';
 import { atualizarBairro } from '../services/bairro/atualizarBairro';
+import { buscarBairroEmMunicipio } from '../services/bairro/buscarBairroEmMunicipio';
 import { buscarBairroPor } from '../services/bairro/buscarBairroPor';
 import { buscarBairros } from '../services/bairro/buscarBairros';
 import { excluirBairro } from '../services/bairro/excluirBairro';
@@ -37,10 +38,25 @@ async function criarBairro(req: Request, res: Response) {
 
   if (!municipioExiste) {
     return res.status(404).send({
-      mensagem: 'Não foi possível localizar bairro',
-      status: 404,
+      mensagem: 'O código do município não existe',
+      status: 400,
     });
   }
+  // console.log('codigo municipio', bairroDados.codigoMunicipio);
+
+  const bairroExistente = await buscarBairroEmMunicipio(
+    bairroDados.nome,
+    bairroDados.codigoMunicipio,
+  );
+
+  if (bairroExistente) {
+    return res.status(400).send({
+      mensagem:
+        'Já existe um bairro com o mesmo nome para o código do município fornecido',
+      status: 400,
+    });
+  }
+
   const bairroNovo = {
     nome: bairroDados.nome,
     status: bairroDados.status,
@@ -53,8 +69,7 @@ async function criarBairro(req: Request, res: Response) {
     const bairros = await buscarBairros();
     return res.status(200).send(bairros);
   }
-
-  return res.status(404).send({
+  return res.status(400).send({
     mensagem: 'Não foi possível incluir bairro no banco de dados.',
     status: 404,
   });

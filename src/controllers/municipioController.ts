@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Uf } from '../entidades/Uf';
+import { buscarBairroEmMunicipio } from '../services/bairro/buscarBairroEmMunicipio';
 import { atualizarMunicipio } from '../services/municipio/atualizarMunicipio';
 import { buscarMunicipioPor } from '../services/municipio/buscarMunicipioPor';
 import { buscarMunicipios } from '../services/municipio/buscarMunicipios';
@@ -43,6 +44,19 @@ async function criarMunicipio(req: Request, res: Response) {
       status: 404,
     });
 
+  const municipioExistente = await buscarBairroEmMunicipio(
+    municipioDados.nome,
+    municipioDados.codigoUF,
+  );
+
+  if (municipioExistente) {
+    return res.status(400).send({
+      mensagem:
+        'Já existe um municipio com o mesmo nome para o código do UF fornecido',
+      status: 400,
+    });
+  }
+
   const municipioNovo = {
     nome: municipioDados.nome,
     status: municipioDados.status,
@@ -55,7 +69,10 @@ async function criarMunicipio(req: Request, res: Response) {
     const municipios = await buscarMunicipios();
     return res.status(200).send(municipios);
   }
-  return res.status(404).send([]);
+  return res.status(400).send({
+    mensagem: 'Não foi possível incluir municipio no banco de dados.',
+    status: 404,
+  });
 }
 
 async function atualizaMunicipio(req: Request, res: Response) {

@@ -34,15 +34,18 @@ interface IFilter {
 
 async function criarUf(req: Request, res: Response) {
   const ufDados: IRequest = req.body;
-  const ufExiste = await buscarUfPor({ nome: ufDados.nome });
-  const resultado = await inserirUf(ufDados);
-  if (resultado == ufExiste) {
-    return res.status(404).send({
-      mensagem: 'uf existe',
-      status: 404,
+  const ufExiste = await buscarUfPor({
+    nome: ufDados.nome,
+    sigla: ufDados.sigla,
+  });
+
+  if (ufExiste) {
+    return res.status(400).send({
+      mensagem: 'Já existe uma UF com o mesmo nome ou sigla',
+      status: 400,
     });
   }
-
+  await inserirUf(ufDados);
   const ufs = await buscarUfs();
   return res.status(200).send(ufs);
 }
@@ -52,12 +55,13 @@ async function atualizaUf(req: Request, res: Response) {
   const ufExiste = await buscarUfPor({
     codigoUF: ufDados.codigoUF,
   });
-  console.log(ufExiste);
-  if (!ufExiste)
+
+  if (!ufExiste) {
     return res.status(404).send({
-      mensagem: 'Não foi possível localizar uf',
+      mensagem: 'UF não encontrada',
       status: 404,
     });
+  }
 
   const ufNovo = {
     codigoUF: ufDados.codigoUF,
@@ -65,18 +69,17 @@ async function atualizaUf(req: Request, res: Response) {
     nome: ufDados.nome,
     status: ufDados.status,
   };
-  console.log('valores recebidos', ufDados);
 
+  // console.log('valores recebidos', ufDados);
   const resultado = await atualizarUf(ufNovo);
-
-  console.log('valores inseridos', resultado);
+  // console.log('valores inseridos', resultado);
   if (resultado) {
     const ufs = await buscarUfs();
     return res.status(200).send(ufs);
   }
 
   return res.status(404).send({
-    mensagem: 'Não foi possível alterar UF no banco de dados.',
+    mensagem: 'Não foi possível alterar UF.',
     status: 404,
   });
 }
