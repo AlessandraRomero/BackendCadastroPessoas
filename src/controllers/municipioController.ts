@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Uf } from '../entidades/Uf';
-import { buscarBairroEmMunicipio } from '../services/bairro/buscarBairroEmMunicipio';
 import { atualizarMunicipio } from '../services/municipio/atualizarMunicipio';
+import { buscarMunicipioEmUF } from '../services/municipio/buscarMunicipioEmUF';
 import { buscarMunicipioPor } from '../services/municipio/buscarMunicipioPor';
 import { buscarMunicipios } from '../services/municipio/buscarMunicipios';
 import { excluirMunicipio } from '../services/municipio/excluirMunicipio';
@@ -44,7 +44,7 @@ async function criarMunicipio(req: Request, res: Response) {
       status: 404,
     });
 
-  const municipioExistente = await buscarBairroEmMunicipio(
+  const municipioExistente = await buscarMunicipioEmUF(
     municipioDados.nome,
     municipioDados.codigoUF,
   );

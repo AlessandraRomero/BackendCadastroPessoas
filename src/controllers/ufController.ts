@@ -18,7 +18,6 @@ async function listarUfs(req: Request, res: Response, next: NextFunction) {
 
   if (ufs) return res.status(200).send(ufs);
 
-  //next(new AppError('Não foi possível consultar UF no banco de dados.', 404));
   return res.status(404).send({
     mensagem: 'Não foi possível consultar UF no banco de dados.',
     status: 404,
