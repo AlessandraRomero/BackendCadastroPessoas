@@ -8,6 +8,8 @@ const validarGet = {
     ),
     nome: Joi.string().max(256).messages({
       'string.max': 'O campo nome não pode exceder 256 caracteres.',
+      'string.base': `O campo nome deve ser uma string.`,
+      'string.empty': `O campo nome não pode ser vazio.`,
     }),
     status: Joi.number().precision(3).valid(1, 2).messages({
       'any.only': 'O campo status só pode ter o valor 1 ou 2.',
@@ -23,6 +25,7 @@ const validarPost = {
       'string.max': 'O campo nome não pode exceder 256 caracteres.',
       'any.required': 'O campo nome é obrigatório.',
       'string.empty': `O campo nome não pode ser vazio.`,
+      'string.base': `O campo nome deve ser uma string.`,
     }),
     status: Joi.number().precision(3).valid(1, 2).required().messages({
       'any.only': 'O campo status só pode ter o valor 1 ou 2.',
@@ -40,6 +43,7 @@ const validarPut = {
       'string.max': 'O campo nome não pode exceder 256 caracteres.',
       'any.required': 'O campo nome é obrigatório.',
       'string.empty': `O campo nome não pode ser vazio.`,
+      'string.base': `O campo nome deve ser uma string.`,
     }),
     status: Joi.number().precision(3).valid(1, 2).required().messages({
       'any.only': 'O campo status só pode ter o valor 1 ou 2.',
