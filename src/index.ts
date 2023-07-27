@@ -20,8 +20,8 @@ AppDataSource.initialize().then(() => {
           (error: ValidationError) => error.message,
         );
         return response.status(400).json({
-          status: '400',
           mensagem: errorBody.join(', '), // Concatenando as mensagens de erro em uma única string separada por vírgula
+          status: '400',
         });
       }
       return response.status(500).json({
