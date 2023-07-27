@@ -17,16 +17,6 @@ async function listarPessoas(req: Request, res: Response) {
   console.log('filtros : ', filtros);
   const pessoaDetalhes = await buscarPessoaPor(filtros);
 
-  if (filtros.codigoPessoa) {
-    if (pessoaDetalhes.length === 0) {
-      return res.status(200).send([]);
-    }
-  } else {
-    if (pessoaDetalhes.length === 0) {
-      return res.status(200).send([]);
-    }
-  }
-
   return res.status(200).send(pessoaDetalhes);
 }
 
