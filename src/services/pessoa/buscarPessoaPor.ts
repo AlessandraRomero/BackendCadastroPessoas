@@ -49,65 +49,72 @@ async function buscarPessoaPor(filtros: IFilterPessoa) {
     .where(filtros)
     .getMany();
 
-  if (!pessoas) {
+  if (pessoas.length === 0) {
     // retornar array vazio
     return [];
   }
-  console.log('PESSOAS: ', pessoas);
-  const pessoasFiltradas = pessoas.map(pessoa => {
-    if (filtros.codigoPessoa) {
-      return {
+  // Verificar se o filtro contém apenas o codigoPessoa
+  const filtroApenasCodigoPessoa =
+    Object.keys(filtros).length === 1 && 'codigoPessoa' in filtros;
+
+  if (filtroApenasCodigoPessoa) {
+    // Retornar apenas a pessoa com detalhes
+    const pessoa = pessoas[0];
+    if (!pessoa) {
+      return []; // Caso não encontre a pessoa com o codigoPessoa especificado
+    }
+    return {
+      codigoPessoa: pessoa.codigoPessoa,
+      nome: pessoa.nome,
+      sobrenome: pessoa.sobrenome,
+      idade: pessoa.idade,
+      login: pessoa.login,
+      senha: pessoa.senha,
+      status: pessoa.status,
+      enderecos: pessoa.enderecos.map(endereco => ({
+        codigoEndereco: endereco.codigoEndereco,
+        nomeRua: endereco.nomeRua,
+        numero: endereco.numero,
+        complemento: endereco.complemento,
+        cep: endereco.cep,
         codigoPessoa: pessoa.codigoPessoa,
-        nome: pessoa.nome,
-        sobrenome: pessoa.sobrenome,
-        idade: pessoa.idade,
-        login: pessoa.login,
-        senha: pessoa.senha,
-        status: pessoa.status,
-        enderecos: pessoa.enderecos.map(endereco => ({
-          codigoEndereco: endereco.codigoEndereco,
-          nomeRua: endereco.nomeRua,
-          numero: endereco.numero,
-          complemento: endereco.complemento,
-          cep: endereco.cep,
-          codigoPessoa: pessoa.codigoPessoa,
+        codigoBairro: endereco.codigoBairro.codigoBairro,
+        bairro: {
           codigoBairro: endereco.codigoBairro.codigoBairro,
-          bairro: {
-            codigoBairro: endereco.codigoBairro.codigoBairro,
-            nome: endereco.codigoBairro.nome,
-            status: endereco.codigoBairro.status,
+          nome: endereco.codigoBairro.nome,
+          status: endereco.codigoBairro.status,
+          codigoMunicipio:
+            endereco.codigoBairro.codigoMunicipio.codigoMunicipio,
+          municipio: {
             codigoMunicipio:
               endereco.codigoBairro.codigoMunicipio.codigoMunicipio,
-            municipio: {
-              codigoMunicipio:
-                endereco.codigoBairro.codigoMunicipio.codigoMunicipio,
-              nome: endereco.codigoBairro.codigoMunicipio.nome,
-              status: endereco.codigoBairro.codigoMunicipio.status,
+            nome: endereco.codigoBairro.codigoMunicipio.nome,
+            status: endereco.codigoBairro.codigoMunicipio.status,
+            codigoUF: endereco.codigoBairro.codigoMunicipio.codigoUF.codigoUF,
+            uf: {
               codigoUF: endereco.codigoBairro.codigoMunicipio.codigoUF.codigoUF,
-              uf: {
-                codigoUF:
-                  endereco.codigoBairro.codigoMunicipio.codigoUF.codigoUF,
-                sigla: endereco.codigoBairro.codigoMunicipio.codigoUF.sigla,
-                nome: endereco.codigoBairro.codigoMunicipio.codigoUF.nome,
-                status: endereco.codigoBairro.codigoMunicipio.codigoUF.status,
-              },
+              sigla: endereco.codigoBairro.codigoMunicipio.codigoUF.sigla,
+              nome: endereco.codigoBairro.codigoMunicipio.codigoUF.nome,
+              status: endereco.codigoBairro.codigoMunicipio.codigoUF.status,
             },
           },
-        })),
-      };
-    } else {
-      return {
-        codigoPessoa: pessoa.codigoPessoa,
-        nome: pessoa.nome,
-        sobrenome: pessoa.sobrenome,
-        idade: pessoa.idade,
-        login: pessoa.login,
-        senha: pessoa.senha,
-        status: pessoa.status,
-        enderecos: [],
-      };
-    }
-  });
+        },
+      })),
+    };
+  }
+  // Retornar todas as pessoas filtradas sem detalhes
+  const pessoasFiltradas = pessoas.map(pessoa => ({
+    codigoPessoa: pessoa.codigoPessoa,
+    nome: pessoa.nome,
+    sobrenome: pessoa.sobrenome,
+    idade: pessoa.idade,
+    login: pessoa.login,
+    senha: pessoa.senha,
+    status: pessoa.status,
+    enderecos: [],
+  }));
+
   return pessoasFiltradas;
 }
+
 export { buscarPessoaPor };
