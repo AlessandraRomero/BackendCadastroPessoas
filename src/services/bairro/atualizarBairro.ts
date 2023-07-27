@@ -25,6 +25,12 @@ async function atualizarBairro(bairroDados: IDataBairro) {
   if (!bairroExiste) {
     return null;
   }
+  const bairroComMesmoNome = await bairroRepository.findOneBy({
+    nome: bairroDados.nome,
+  });
+  if (bairroComMesmoNome) {
+    return null;
+  }
 
   bairroExiste.nome = bairroDados.nome;
   bairroExiste.status = bairroDados.status;

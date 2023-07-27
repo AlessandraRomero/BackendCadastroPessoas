@@ -21,10 +21,16 @@ async function atualizarMunicipio(municipioDados: IRequest) {
     return null;
   }
 
+  const municipioComMesmoNome = await municipioRepository.findOneBy({
+    nome: municipioDados.nome,
+  });
+  if (municipioComMesmoNome) {
+    return null;
+  }
+
   municipioExiste.nome = municipioDados.nome;
   municipioExiste.status = municipioDados.status;
   municipioExiste.codigoUF = municipioDados.codigoUF;
-
   await municipioRepository.save(municipioExiste);
 
   return municipioExiste;
