@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { atualizarUf } from '../services/uf/atualizarUf';
-import { buscarUfPor } from '../services/uf/buscarUfPor';
 import { buscarUfs } from '../services/uf/buscarUfs';
 import { excluirUf } from '../services/uf/excluirUf';
+import { filtrosUf } from '../services/uf/ffltrosUf';
 import { inserirUf } from '../services/uf/inserirUf';
 
 interface IRequest {
@@ -14,7 +14,7 @@ interface IRequest {
 
 async function listarUfs(req: Request, res: Response, next: NextFunction) {
   const filtros: IFilter = req.query;
-  const ufs = await buscarUfPor(filtros);
+  const ufs = await filtrosUf(filtros);
 
   if (ufs) return res.status(200).send(ufs);
 
@@ -33,54 +33,31 @@ interface IFilter {
 
 async function criarUf(req: Request, res: Response) {
   const ufDados: IRequest = req.body;
-  const ufExiste = await buscarUfPor({
-    nome: ufDados.nome,
-    sigla: ufDados.sigla,
-  });
-
-  if (ufExiste) {
+  const ufFoiInserida = await inserirUf(ufDados);
+  if (!ufFoiInserida) {
     return res.status(400).send({
       mensagem: 'Já existe uma UF com o mesmo nome ou sigla',
       status: 400,
     });
   }
-  await inserirUf(ufDados);
   const ufs = await buscarUfs();
   return res.status(200).send(ufs);
 }
 
 async function atualizaUf(req: Request, res: Response) {
   const ufDados: IRequest = req.body;
-  const ufExiste = await buscarUfPor({
-    codigoUF: ufDados.codigoUF,
-  });
+  const ufAtualizada = await atualizarUf(ufDados);
 
-  if (!ufExiste) {
-    return res.status(404).send({
-      mensagem: 'UF não encontrada',
-      status: 404,
+  if (!ufAtualizada) {
+    return res.status(400).send({
+      mensagem:
+        'UF não encontrada ou já existe outra UF com a mesma sigla ou nome',
+      status: 400,
     });
   }
 
-  const ufNovo = {
-    codigoUF: ufDados.codigoUF,
-    sigla: ufDados.sigla,
-    nome: ufDados.nome,
-    status: ufDados.status,
-  };
-
-  // console.log('valores recebidos', ufDados);
-  const resultado = await atualizarUf(ufNovo);
-  // console.log('valores inseridos', resultado);
-  if (resultado) {
-    const ufs = await buscarUfs();
-    return res.status(200).send(ufs);
-  }
-
-  return res.status(404).send({
-    mensagem: 'Não foi possível alterar UF.',
-    status: 404,
-  });
+  const ufs = await buscarUfs();
+  return res.status(200).send(ufs);
 }
 
 async function excluiUf(req: Request, res: Response) {
