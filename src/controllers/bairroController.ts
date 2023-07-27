@@ -5,6 +5,7 @@ import { buscarBairroEmMunicipio } from '../services/bairro/buscarBairroEmMunici
 import { buscarBairroPor } from '../services/bairro/buscarBairroPor';
 import { buscarBairros } from '../services/bairro/buscarBairros';
 import { excluirBairro } from '../services/bairro/excluirBairro';
+import { filtrosBairro } from '../services/bairro/filtrosBairro';
 import { inserirBairro } from '../services/bairro/inserirBairro';
 import { buscarMunicipioPor } from '../services/municipio/buscarMunicipioPor';
 
@@ -17,11 +18,11 @@ interface IRequest {
 
 async function listarBairros(req: Request, res: Response) {
   const filtros: IFilter = req.query;
-  const bairros = await buscarBairroPor(filtros);
+  const bairros = await filtrosBairro(filtros);
 
   if (bairros) return res.status(200).send(bairros);
 
-  return res.status(404).send({});
+  return res.status(404).send([]);
 }
 interface IFilter {
   codigoBairro?: number;
@@ -101,11 +102,14 @@ async function atualizaBairro(req: Request, res: Response) {
 
   const resultado = await atualizarBairro(bairroNovo);
   console.log('resultado', resultado);
-  if (resultado) {
-    const bairros = await buscarBairros();
-    return res.status(200).send(bairros);
+  if (!resultado) {
+    return res.status(400).send({
+      mensagem: 'Já existe um bairro com o mesmo nome',
+      status: 400,
+    });
   }
-  return res.status(404).send([]);
+  const bairros = await buscarBairros();
+  return res.status(200).send(bairros);
 }
 
 async function excluiBairro(req: Request, res: Response) {
