@@ -1,5 +1,6 @@
 import { AppDataSource } from '../../AppDataSource';
 import { Uf } from '../../entidades/Uf';
+import { verificarUfExistente } from './verificarUfExistente';
 
 interface IRequest {
   codigoUF: number;
@@ -13,9 +14,20 @@ async function atualizarUf(ufDados: IRequest) {
     codigoUF: ufDados.codigoUF,
   });
 
-  if (ufExiste === null) {
+  if (!ufExiste) {
     return null;
   }
+
+  // Verificar se já existe outra UF com a mesma sigla ou nome
+  const ufComMesmaSiglaOuNome = await verificarUfExistente(
+    ufDados.sigla,
+    ufDados.nome,
+  );
+
+  if (ufComMesmaSiglaOuNome) {
+    return null; // Se já existe outra UF com a mesma sigla ou nome, retornar null
+  }
+
   ufExiste.codigoUF = ufDados.codigoUF;
   ufExiste.sigla = ufDados.sigla;
   ufExiste.nome = ufDados.nome;
