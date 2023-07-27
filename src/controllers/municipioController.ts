@@ -5,6 +5,7 @@ import { buscarMunicipioEmUF } from '../services/municipio/buscarMunicipioEmUF';
 import { buscarMunicipioPor } from '../services/municipio/buscarMunicipioPor';
 import { buscarMunicipios } from '../services/municipio/buscarMunicipios';
 import { excluirMunicipio } from '../services/municipio/excluirMunicipio';
+import { filtrosMunicipio } from '../services/municipio/filtrosMunicipio';
 import { inserirMunicipio } from '../services/municipio/inserirMunicipio';
 import { buscarUfPor } from '../services/uf/buscarUfPor';
 
@@ -17,7 +18,7 @@ interface IRequest {
 
 async function listarMunicipios(req: Request, res: Response) {
   const filtros: IFilter = req.query;
-  const municipios = await buscarMunicipioPor(filtros);
+  const municipios = await filtrosMunicipio(filtros);
 
   if (municipios) return res.status(200).send(municipios);
 
@@ -74,7 +75,6 @@ async function criarMunicipio(req: Request, res: Response) {
     status: 404,
   });
 }
-
 async function atualizaMunicipio(req: Request, res: Response) {
   const municipioDados: IRequest = req.body;
   const ufExiste = await buscarUfPor({ codigoUF: municipioDados.codigoUF });
@@ -88,7 +88,6 @@ async function atualizaMunicipio(req: Request, res: Response) {
       mensagem: 'Não foi possível localizar',
       status: 404,
     });
-
   const municipioNovo = {
     codigoMunicipio: municipioDados.codigoMunicipio,
     nome: municipioDados.nome,
@@ -98,14 +97,14 @@ async function atualizaMunicipio(req: Request, res: Response) {
 
   const resultado = await atualizarMunicipio(municipioNovo);
 
-  if (resultado) {
-    const municipios = await buscarMunicipios();
-    return res.status(200).send(municipios);
+  if (!resultado) {
+    return res.status(400).send({
+      mensagem: 'Já existe um município com o mesmo nome',
+      status: 400,
+    });
   }
-  return res.status(404).send({
-    mensagem: 'Não foi possível alterar municipio no banco de dados.',
-    status: 404,
-  });
+  const municipios = await buscarMunicipios();
+  return res.status(200).send(municipios);
 }
 
 async function excluiMunicipio(req: Request, res: Response) {
