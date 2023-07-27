@@ -102,6 +102,7 @@ async function atualizaMunicipio(req: Request, res: Response) {
       mensagem: 'Já existe um município com o mesmo nome',
       status: 400,
     });
+    ('');
   }
   const municipios = await buscarMunicipios();
   return res.status(200).send(municipios);
